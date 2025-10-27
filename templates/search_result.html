@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>検索結果</title>
+    <style>
+        body {
+            font-family: "MS Pゴシック", "MS PGothic", sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #000080;
+            border-bottom: 2px solid #000080;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .back-link {
+            color: #0000ff;
+            text-decoration: underline;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .back-link:visited {
+            color: #551a8b;
+        }
+        
+        .back-link:hover {
+            color: #ff0000;
+        }
+        
+        .search-box {
+            background-color: #f0f0f0;
+            border: 2px solid #cccccc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #999999;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .search-button {
+            padding: 8px 20px;
+            background-color: #e0e0e0;
+            border: 2px outset #cccccc;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .search-button:active {
+            border-style: inset;
+        }
+        
+        .search-result-info {
+            background-color: #ffffcc;
+            border: 1px solid #ffcc00;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        
+        .board-section {
+            margin-bottom: 30px;
+        }
+        
+        .board-header {
+            background-color: #e0e0e0;
+            padding: 10px 12px;
+            font-weight: bold;
+            border: 1px solid #cccccc;
+            border-bottom: none;
+            font-size: 15px;
+        }
+        
+        .board-name-link {
+            color: #000080;
+            text-decoration: none;
+        }
+        
+        .board-name-link:hover {
+            text-decoration: underline;
+        }
+        
+        .thread-list {
+            border: 1px solid #cccccc;
+            background-color: #fafafa;
+        }
+        
+        .thread-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eeeeee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .thread-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .thread-item:last-child {
+            border-bottom: none;
+        }
+        
+        .thread-info {
+            flex: 1;
+        }
+        
+        .thread-link {
+            color: #0000ff;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        .thread-link:visited {
+            color: #551a8b;
+        }
+        
+        .thread-link:hover {
+            color: #ff0000;
+        }
+        
+        .thread-meta {
+            color: #666666;
+            font-size: 12px;
+            white-space: nowrap;
+            margin-left: 15px;
+        }
+        
+        .no-results {
+            background-color: #f0f0f0;
+            border: 1px solid #cccccc;
+            padding: 30px;
+            text-align: center;
+            color: #666666;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #cccccc;
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← トップに戻る</a>
+        
+        <h1>🔍 スレッド検索</h1>
+        
+        <!-- 検索窓 -->
+        <div class="search-box">
+            <label for="search">スレッドを検索</label>
+            <form class="search-form" action="/search" method="GET">
+                <input type="text" id="search" name="q" class="search-input" placeholder="キーワードを入力..." value="{{ query }}">
+                <button type="submit" class="search-button">検索</button>
+            </form>
+        </div>
+        
+        <!-- 検索結果情報 -->        
+        {% if query %}
+        <div class="search-result-info">
+            {{ query }}」の検索結果: {{ board_count }}板 {{ thread_count }}
+        </div>
+        {% endif %}        
+        
+        <!-- 検索結果: 板ごとにスレッドを列挙 -->
+         {% for board in search_results %}
+        <div class="board-section">
+            <div class="board-header">
+                <a href="/subback/{{ board.id }}" class="board-name-link">{{ board.name }}</a>
+            </div>
+            <div class="thread-list">
+                {% for thread in board.threads %}
+                <div class="thread-item">
+                    <div class="thread-info">
+                        <a href="/threads/{{ thread.id }}" class="thread-link">{{ thread.title }}</a>
+                    </div>
+                    <div class="thread-meta">{{ thread.post_count }}レス | {{ thread.last_updated }}</div>
+                </div>
+                {% endfor %}
+                
+                <div class="thread-item">
+                    <div class="thread-info">
+                        <a href="/threads/2" class="thread-link">【議論】ニュースの真偽について</a>
+                    </div>
+                    <div class="thread-meta">89レス | 5時間前</div>
+                </div>
+                
+                <div class="thread-item">
+                    <div class="thread-info">
+                        <a href="/threads/3" class="thread-link">今日のニュースまとめスレ</a>
+                    </div>
+                    <div class="thread-meta">234レス | 1日前</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}       
+        
+        <!-- 検索結果がない場合 -->
+        {% if not search_results %}
+        <div class="no-results">
+            <p>「{{ query }}」に一致するスレッドが見つかりませんでした。</p>
+            <p>別のキーワードで検索してください。</p>
+        </div>
+        {% endif %}
+        
+        <div class="footer">
+            <p>掲示板 ver 1.0 | <a href="#">運営者情報</a> | <a href="#">お問い合わせ</a></p>
+        </div>
+    </div>
+</body>
+</html>

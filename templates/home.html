@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掲示板トップ</title>
+    <style>
+        body {
+            font-family: "MS Pゴシック", "MS PGothic", sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #000080;
+            border-bottom: 2px solid #000080;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            background-color: #f0f0f0;
+            border: 2px solid #cccccc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #999999;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .search-button {
+            padding: 8px 20px;
+            background-color: #e0e0e0;
+            border: 2px outset #cccccc;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .search-button:active {
+            border-style: inset;
+        }
+        
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-button {
+            display: block;
+            padding: 15px;
+            background-color: #e8e8e8;
+            border: 2px outset #cccccc;
+            text-align: center;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .nav-button:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .nav-button:active {
+            border-style: inset;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #000080;
+            border-bottom: 1px solid #000080;
+            padding-bottom: 3px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .topic-list {
+            border: 1px solid #cccccc;
+            background-color: #fafafa;
+        }
+        
+        .topic-item {
+            padding: 12px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        
+        .topic-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .topic-link {
+            color: #0000ff;
+            text-decoration: underline;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .topic-link:visited {
+            color: #551a8b;
+        }
+        
+        .topic-link:hover {
+            color: #ff0000;
+        }
+        
+        .topic-meta {
+            color: #666666;
+            font-size: 12px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #cccccc;
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 掲示板トップ</h1>
+        
+        <!-- レス検索 -->
+        <div class="search-box">
+            <label for="search">レス検索</label>
+            <form class="search-form" action="/search" method="GET">
+                <input type="text" id="search" name="q" class="search-input" placeholder="キーワードを入力...">
+                <button type="submit" class="search-button">検索</button>
+            </form>
+        </div>
+        
+        <!-- ナビゲーションボタン -->
+        <div class="nav-buttons">
+            <a href="/topics/new" class="nav-button">🆕 新着スレッド</a>
+            <a href="/histories" class="nav-button">📖 閲覧履歴</a>
+            <a href="/subback" class="nav-button">📂 板一覧</a>
+            <a href="/topics/hot" class="nav-button">🔥 人気スレッド</a>
+        </div>
+        
+        <!-- 注目トピック -->
+        <div class="section-title">注目トピック</div>
+        <div class="topic-list">
+            {% for topic in featured_topics %}
+            <div class="topic-item">
+                <a href="/threads/1" class="topic-link">【速報】最新ニュースについて語ろう</a>
+                <div class="topic-meta">ニュース速報 | 123レス | 2時間前</div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="footer">
+            <p>掲示板 ver 1.0 | <a href="#">運営者情報</a> | <a href="#">お問い合わせ</a></p>
+        </div>
+    </div>
+</body>
+</html>

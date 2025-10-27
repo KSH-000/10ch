@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>板一覧</title>
+    <style>
+        body {
+            font-family: "MS Pゴシック", "MS PGothic", sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #000080;
+            border-bottom: 2px solid #000080;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .back-link {
+            color: #0000ff;
+            text-decoration: underline;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .back-link:visited {
+            color: #551a8b;
+        }
+        
+        .back-link:hover {
+            color: #ff0000;
+        }
+        
+        .category-section {
+            margin-bottom: 15px;
+        }
+        
+        .category-button {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #e8e8e8;
+            border: 2px outset #cccccc;
+            text-align: left;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .category-button:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .category-button:active {
+            border-style: inset;
+        }
+        
+        .category-button .arrow {
+            font-size: 12px;
+            transition: transform 0.2s;
+        }
+        
+        .category-button.active .arrow {
+            transform: rotate(90deg);
+        }
+        
+        .board-list {
+            display: none;
+            border: 1px solid #cccccc;
+            border-top: none;
+            background-color: #fafafa;
+        }
+        
+        .board-list.active {
+            display: block;
+        }
+        
+        .board-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        
+        .board-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .board-item:last-child {
+            border-bottom: none;
+        }
+        
+        .board-link {
+            color: #0000ff;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        .board-link:visited {
+            color: #551a8b;
+        }
+        
+        .board-link:hover {
+            color: #ff0000;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #cccccc;
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← トップに戻る</a>
+        
+        <h1>📂 板一覧</h1>
+
+        <!--カテゴリ→板名の表示-->
+        {% for category in categories %}
+        <div class="category-section">
+            <button class="category-button" onclick="toggleCategory(this)">
+                <span>{{ category.name }}</span>
+                <span class="arrow">▶</span>
+            </button>
+            <div class="board-list">
+                {% for board in category.boards %}
+                <div class="board-item">                    
+                    <a href="/subback/{{ board.id }}" class="board-link">{{ board.name }}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}                
+        
+        <div class="footer">
+            <p>掲示板 ver 1.0 | <a href="#">運営者情報</a> | <a href="#">お問い合わせ</a></p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleCategory(button) {
+            const boardList = button.nextElementSibling;
+            const isActive = boardList.classList.contains('active');
+            
+            // すべてのカテゴリを閉じる
+            document.querySelectorAll('.board-list').forEach(list => {
+                list.classList.remove('active');
+            });
+            document.querySelectorAll('.category-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // クリックされたカテゴリが閉じていた場合は開く
+            if (!isActive) {
+                boardList.classList.add('active');
+                button.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

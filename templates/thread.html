@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スレッド - 10ch</title>
+    <style>
+        body {
+            font-family: "MS Pゴシック", "MS PGothic", sans-serif;
+            background-color: #e5e5e5;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #b8c5d6;
+            padding: 10px 20px;
+            border-bottom: 2px solid #8899aa;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000080;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .breadcrumb {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb a {
+            color: #0000ff;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb a:visited {
+            color: #551a8b;
+        }
+        
+        .breadcrumb a:hover {
+            color: #ff0000;
+        }
+        
+        .thread-header {
+            background-color: #f0f0f0;
+            border: 2px solid #cccccc;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .thread-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000080;
+            margin: 0 0 10px 0;
+        }
+        
+        .thread-info {
+            font-size: 12px;
+            color: #666666;
+        }
+        
+        .search-box {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .search-label {
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #999999;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .search-button {
+            padding: 6px 15px;
+            background-color: #e0e0e0;
+            border: 2px outset #cccccc;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .search-button:active {
+            border-style: inset;
+        }
+        
+        .post-list-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 10px;
+        }
+        
+        .post-item {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .post-header {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+        
+        .post-number {
+            font-weight: bold;
+            color: #000000;
+        }
+        
+        .post-name {
+            font-weight: bold;
+            color: #008800;
+        }
+        
+        .post-id {
+            color: #999999;
+            font-size: 12px;
+        }
+        
+        .post-date {
+            color: #999999;
+            font-size: 12px;
+        }
+        
+        .post-message {
+            color: #000000;
+            margin-bottom: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .post-actions {
+            text-align: right;
+        }
+        
+        .delete-button {
+            padding: 3px 10px;
+            font-size: 12px;
+            color: #666666;
+            background-color: #f5f5f5;
+            border: 1px solid #cccccc;
+            cursor: pointer;
+        }
+        
+        .delete-button:hover {
+            color: #ff0000;
+            border-color: #ff0000;
+        }
+        
+        .post-form-section {
+            background-color: #f0f0f0;
+            border: 2px solid #cccccc;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .form-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .form-input {
+            width: 300px;
+            padding: 6px;
+            border: 1px solid #999999;
+            font-size: 13px;
+            font-family: inherit;
+            background-color: #e0f0f0;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            max-width: 600px;
+            padding: 8px;
+            border: 1px solid #999999;
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
+            background-color: #e0f0f0;
+        }
+        
+        .submit-button {
+            padding: 8px 25px;
+            background-color: #d0d0d0;
+            border: 2px outset #cccccc;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: inherit;
+        }
+        
+        .submit-button:hover {
+            background-color: #c0c0c0;
+        }
+        
+        .submit-button:active {
+            border-style: inset;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #cccccc;
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>10ch.com</h1>
+    </div>
+    
+    <div class="container">
+        <!-- パンくずリスト -->
+        <div class="breadcrumb">
+            <a href="/">トップ</a> &gt; <a href="/subback/programming">プログラミング板</a> &gt; このスレッド
+        </div>
+        
+    <!-- スレッドタイトル -->
+    <div class="thread-header">
+    <h2 class="thread-title">{{ thread.title }}</h2>
+    <div class="thread-info">作成日時: {{ thread.pub_date }}</div>
+    </div>
+        <div class="search-box">
+            <form class="search-form" action="/thread/search" method="GET">
+                <span class="search-label">レス検索:</span>
+                <input type="text" name="q" class="search-input" placeholder="キーワードを入力...">
+                <button type="submit" class="search-button">検索</button>
+            </form>
+        </div>
+        
+        <!-- 投稿一覧 -->
+        <div class="post-list-title">投稿一覧</div>
+        
+        {% for article in articles %}
+        <div class="post-item">
+            <div class="post-header">
+                <span class="post-number">{{ loop.index }}</span>:
+                <span class="post-name">{{ article.name }}</span>
+                <span class="post-id">ID:{{ article.id }}</span>
+                <span class="post-date">{{ article.pub_date }}</span>
+            </div>
+            <div class="post-message">{{ article.message }}</div>
+            <div class="post-actions">
+                <form method="post" action="/delete/1">
+                    <button type="submit" class="delete-button">削除</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- 投稿フォーム --> 
+        <div class="post-form-section">
+            <div class="form-title">新規投稿</div>
+            <form method="post" action="{{ url_for('show_thread', thread_id=thread.id) }}">
+                <div class="form-group">
+                    <label class="form-label" for="name">名前(任意):</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="名前を入力してください">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="message">メッセージ:</label>
+                    <textarea id="message" name="message" rows="6" class="form-textarea" placeholder="メッセージを入力してください"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-button">投稿</button>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <p>10ch.com ver 1.0 | <a href="#">利用規約</a> | <a href="#">削除依頼</a></p>
+        </div>
+    </div>
+</body>
+</html>
